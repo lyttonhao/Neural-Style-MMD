@@ -1,4 +1,3 @@
-import find_mxnet
 import mxnet as mx
 import os, sys
 from collections import namedtuple
