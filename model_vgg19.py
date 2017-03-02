@@ -5,7 +5,8 @@ from collections import namedtuple
 
 ConvExecutor = namedtuple('ConvExecutor', ['executor', 'data', 'data_grad', 'style', 'content', 'arg_dict'])
 
-def get_symbol():
+
+def get_symbol(style_layers):
     # declare symbol
     data = mx.sym.Variable("data")
     conv1_1 = mx.symbol.Convolution(name='conv1_1', data=data , num_filter=64, pad=(1,1), kernel=(3,3), stride=(1,1), no_bias=False, workspace=1024)
@@ -41,7 +42,8 @@ def get_symbol():
 
     # style and content layers
     # style = mx.sym.Group([relu3_1, relu4_1, relu5_1])
-    style = mx.sym.Group([relu1_1, relu2_1, relu3_1, relu4_1, relu5_1])
+    style_losses = [relu1_1, relu2_1, relu3_1, relu4_1, relu5_1]
+    style = mx.sym.Group(style_losses[:style_layers])
     content = mx.sym.Group([relu4_2])
     return style, content
 
@@ -50,20 +52,20 @@ def get_executor(style, content, input_size, ctx, tmp_forshape=None):
     out = mx.sym.Group([style, content])
     tmp = mx.sym.Group([tmp_forshape, content]) if tmp_forshape is not None else out
     # make executor
-    #print 'content',content.infer_shape(data=(1, 3, input_size[0], input_size[1]))
-    #print 'style', style.infer_shape(data=(1, 3, input_size[0], input_size[1]))
     arg_shapes, output_shapes, aux_shapes = tmp.infer_shape(data=(1, 3, input_size[0], input_size[1]))
-    print out, arg_shapes
+    #print out, arg_shapes
     arg_names = tmp.list_arguments()
     arg_dict = dict(zip(arg_names, [mx.nd.zeros(shape, ctx=ctx) for shape in arg_shapes]))
     grad_dict = {"data": arg_dict["data"].copyto(ctx)}
     # init with pretrained weight
     pretrained = mx.nd.load("./model/vgg19.params")
+
     for name in arg_names:
         if name == "data":
             continue
         key = "arg:" + name
         if key in pretrained:
+            # print key,  pretrained[key].shape, arg_dict[name].shape
             pretrained[key].copyto(arg_dict[name])
         else:
             print("Skip argument %s" % name)
