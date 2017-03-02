@@ -3,9 +3,9 @@
 This repository holds the MXNet code for the paper
 
 >
-**Demystifying Neural Style Transfer,
+**Demystifying Neural Style Transfer**,
 Yanghao Li, Naiyan Wang, Jiaying Liu, and Xiaodi Hou,
-arXiv preprint arXiv:1701.01036
+arXiv preprint arXiv:1701.01036, 2017
 >
 [[Arxiv Preprint](https://arxiv.org/abs/1701.01036)]
 
@@ -33,11 +33,10 @@ python neural-style.py --mmd-kernel linear --gpu 0 --style-weight 5.0 --content-
 ```
 We support 4 single transfer methods, including 3 mmd kernels, including linear, poly and Gaussian, and a BN Statistics Matching method. At the same time, the code supports fusing different transfer methods with specific weights.
 
-**Options
+**Options**
 * `--mmd-kernel`: Specify MMD kernel (`linear`, `poly`, `Gaussian`), also their combination, e.g. `linear,poly`.
 * `--bn-loss`: Whether to use the BN method. 
 * `--multi-weights`: The weights when fusing different transfer methods, e.g. `0.5,0.5`.
 * `--style-weight`: How much to weight the style loss term. It is equivalent to the balance factor gamma in the paper when we fix the `content-weight` as 1.0.
 
 You can run `python neural-style.py` with `-h` to see more options.
-
