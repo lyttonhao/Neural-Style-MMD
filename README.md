@@ -5,7 +5,7 @@ This repository holds the MXNet code for the paper
 >
 **Demystifying Neural Style Transfer**,
 Yanghao Li, Naiyan Wang, Jiaying Liu, and Xiaodi Hou,
-arXiv preprint arXiv:1701.01036, 2017
+International Joint Conference on Artificial Intelligence (IJCAI), 2017
 >
 [[Arxiv Preprint](https://arxiv.org/abs/1701.01036)]
 
